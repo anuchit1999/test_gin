@@ -1,9 +1,10 @@
 package infrastructure
 
 import (
-    "net/http"
+	"net/http"
 
-    "github.com/gin-gonic/gin"
+	"github.com/gin-contrib/static"
+	"github.com/gin-gonic/gin"
 )
 
 //GinRouter -> Gin Router
@@ -15,10 +16,14 @@ type GinRouter struct {
 func NewGinRouter() GinRouter {
 
     httpRouter := gin.Default()
-
-    httpRouter.GET("/", func(c *gin.Context) {
-        c.JSON(http.StatusOK, gin.H{"data": "Up and Running..."})
-    })
+    httpRouter.Use(static.Serve("/", static.LocalFile("./templates", true)))
+    httpRouter.LoadHTMLGlob("templates/*")
+	httpRouter.GET("/", func(c *gin.Context) {
+		c.HTML(http.StatusOK, "index.html", 
+        gin.H{
+			"title": "Main website",
+		})
+	})
     return GinRouter{
         Gin: httpRouter,
     }

@@ -7,6 +7,7 @@ import (
     "blog/api/service"
     "blog/infrastructure"
     "blog/models"
+    
 )
 
 func init() {
@@ -15,14 +16,14 @@ func init() {
 
 func main() {
 
-    router := infrastructure.NewGinRouter() //router has been initialized and configured
-    db := infrastructure.NewDatabase() // databse has been initialized and configured
-    postRepository := repository.NewPostRepository(db) // repository are being setup
-    postService := service.NewPostService(postRepository) // service are being setup
-    postController := controller.NewPostController(postService) // controller are being set up
-    postRoute := routes.NewPostRoute(postController, router) // post routes are initialized
-    postRoute.Setup() // post routes are being setup
+    router := infrastructure.NewGinRouter()
+    db := infrastructure.NewDatabase()
+    postRepository := repository.NewPostRepository(db)
+    postService := service.NewPostService(postRepository)
+    postController := controller.NewPostController(postService)
+    postRoute := routes.NewPostRoute(postController, router)
+    postRoute.Setup()
 
-    db.DB.AutoMigrate(&models.Post{}) // migrating Post model to datbase table
-    router.Gin.Run(":8000") //server started on 8000 port
+    db.DB.AutoMigrate(&models.Post{})
+    router.Gin.Run(":8000")
 }
