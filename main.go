@@ -1,5 +1,4 @@
 package main
-
 import (
     "blog/api/controller"
     "blog/api/repository"
@@ -7,7 +6,6 @@ import (
     "blog/api/service"
     "blog/infrastructure"
     "blog/models"
-    
 )
 
 func init() {
@@ -18,12 +16,26 @@ func main() {
 
     router := infrastructure.NewGinRouter()
     db := infrastructure.NewDatabase()
+
     postRepository := repository.NewPostRepository(db)
     postService := service.NewPostService(postRepository)
     postController := controller.NewPostController(postService)
     postRoute := routes.NewPostRoute(postController, router)
     postRoute.Setup()
 
-    db.DB.AutoMigrate(&models.Post{})
+    userRepository := repository.NewUserRepository(db)
+    userService := service.NewUserService(userRepository)
+    userController := controller.NewUserController(userService)
+    userRoute := routes.NewUserRoute(userController, router)
+    userRoute.Setup()
+
+    instructorRepository := repository.NewInstructorRepository(db)
+    instructorService := service.NewInstructorService(instructorRepository)
+    instructorController := controller.NewInstructorController(instructorService)
+    instructorRoute := routes.NewInstructorRoute(instructorController, router)
+    instructorRoute.Setup()
+
+    db.DB.AutoMigrate(&models.Post{}, &models.User{}, &models.Instructor{})
+
     router.Gin.Run(":8000")
 }

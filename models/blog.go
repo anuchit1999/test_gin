@@ -1,7 +1,6 @@
 package models
 import "time"
 
-//Post Post Model
 type Post struct {
     ID        int64     `gorm:"primary_key;auto_increment" json:"id"`
     Title     string    `gorm:"size:200" json:"title"`
@@ -10,12 +9,10 @@ type Post struct {
     UpdatedAt time.Time `json:"updated_at,omitempty"`
 }
 
-// TableName method sets table name for Post model
 func (post *Post) TableName() string {
     return "post"
 }
 
-//ResponseMap -> response map method of Post
 func (post *Post) ResponseMap() map[string]interface{} {
     resp := make(map[string]interface{})
     resp["id"] = post.ID
